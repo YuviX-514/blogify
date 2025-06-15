@@ -2,45 +2,127 @@
 <html lang="en">
   <head>
     <%- include('./partials/head') %>
-    <title>Blog</title>
+    <title><%= blog.title %></title>
+    <style>
+      body {
+        overflow-x: hidden;
+      }
+
+      .blog-container {
+        max-width: 700px;
+        margin: auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .blog-container img.cover {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .comment img,
+      .author img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 8px;
+      }
+
+      .comment-box {
+        background: #fff;
+        border: 1px solid #ddd;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 576px) {
+        .blog-container {
+          padding: 15px;
+        }
+      }
+    </style>
   </head>
+
   <body>
     <%- include('./partials/nav') %>
-    <div class="container mt-4">
-      <h1><%= blog.title %></h1>
-      <img src="<%= blog.coverImageURL %>"width="700px" >
-      <pre><%= blog.body %></pre>
+
+    <div class="container mt-4 blog-container">
+      <h1 class="mb-3 text-center"><%= blog.title %></h1>
+      <img src="<%= blog.coverImageURL %>" class="cover" alt="Cover Image" />
+      <pre style="white-space: pre-wrap"><%= blog.body %></pre>
     </div>
 
-    <div class="container mt-4">
-      <img src="<%= blog.createdBy.profileImageURL %>"width="40px"/> <%= blog.createdBy.fullName %>
-    </div>
-    
-    <div class="container mt-3">
-      <h1>Comments(<%= comments.length %>)</h1>
+    <div
+      class="container mt-4 blog-container d-flex justify-content-between align-items-center"
+    >
+      <div class="d-flex align-items-center author">
+        <img src="<%= blog.createdBy.profileImageURL %>" alt="User" />
+        <strong class="ms-2"><%= blog.createdBy.fullName %></strong>
+      </div>
+
       <% if (locals.user) { %>
-        <form action="/blog/comment/<%= blog._id %>" method="post">
-          <div class="mb-3">
-            
-            <input
-            type="text"
-            name="content"
-            class="form-control"
-            placeholder="Enter your comment"
-          />
-          <button type="submit" class="btn btn-sm btn-outline-primary">Add</button>
-          
-        </div>
+      <form action="/blog/like/<%= blog._id %>" method="POST" class="mb-0">
+        <button class="btn btn-sm btn-outline-danger">
+          ❤️ (<%= blog.likes.length %>)
+        </button>
       </form>
       <% } %>
     </div>
-    <div class="container mt-3">
-      <% comments.forEach(comment => { %>
+
+    <!-- 💬 Comments Section -->
+    <div class="container mt-4 blog-container">
+      <h3>Comments (<%= comments.length %>)</h3>
+
+      <% if (locals.user) { %>
+      <form action="/blog/comment/<%= blog._id %>" method="post" class="mb-3">
+        <input
+          type="text"
+          name="content"
+          class="form-control mb-2"
+          placeholder="Enter your comment"
+          required
+        />
+        <button type="submit" class="btn btn-sm btn-outline-primary">
+          Add
+        </button>
+      </form>
+      <% } %> <% comments.forEach(comment => { %>
+
+      <div class="comment-box d-flex align-items-start justify-content-between">
+        <div class="comment-box d-flex align-items-start comment">
+        <img src="<%= comment.createdBy.profileImageURL %>" alt="Commenter" />
         <div>
-          <img src="<%= comment.createdBy.profileImageURL %>"width="40px"/> <%= comment.createdBy.fullName %>:
-          <pre><%= comment.content %></pre>
+          <strong><%= comment.createdBy.fullName %></strong>
+          <p><%= comment.content %></p>
         </div>
-      <% }) %>
+        </div>
+
+         <% if (user && comment.createdBy._id.equals(user._id)) { %>
+    <form method="POST" action="/blog/comment/delete/<%= comment._id %>" onsubmit="return confirm('Delete this comment?')">
+      <button class="btn btn-sm btn-outline-danger">🗑️</button>
+    </form>
+  <% } %>
+
+      </div>  
+
+
+      <% }) %> <% if (user && blog.createdBy._id.equals(user._id)) { %>
+      <form
+        action="/blog/delete/<%= blog._id %>"
+        method="POST"
+        onsubmit="return confirm('Are you sure you want to delete this blog?');"
+      >
+        <button type="submit" class="btn btn-sm btn-danger mt-2">
+          🗑️ Delete Post
+        </button>
+      </form>
+      <% } %>
     </div>
 
     <%- include('./partials/script') %>

@@ -3,10 +3,33 @@
   <head>
     <%- include('./partials/head') %>
     <title>Add New Blogpage</title>
+    <style>
+      body {
+        overflow-x: hidden;
+      }
+
+      form.container {
+        max-width: 600px;
+        padding: 20px;
+        margin: auto;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+
+      @media (max-width: 576px) {
+        form.container {
+          padding: 15px;
+        }
+      }
+    </style>
   </head>
   <body>
     <%- include('./partials/nav') %>
+
     <form class="container mt-4" action="/blog" method="post" enctype="multipart/form-data">
+      <h2 class="mb-4 text-center">Create a New Blog</h2>
+
       <div class="mb-3">
         <label for="coverImage" class="form-label">Cover Image</label>
         <input
@@ -17,6 +40,7 @@
           aria-describedby="coverImage"
         />
       </div>
+
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -25,16 +49,26 @@
           id="title"
           name="title"
           aria-describedby="title"
+          placeholder="Enter blog title"
         />
       </div>
+
       <div class="mb-3">
         <label for="body" class="form-label">Body</label>
-         <textarea class="form-control" id="body" name="body"></textarea>
+        <textarea
+          class="form-control"
+          id="body"
+          name="body"
+          rows="6"
+          placeholder="Write your blog here..."
+        ></textarea>
       </div>
-      <div class="mb-3">
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
       </div>
     </form>
+
     <%- include('./partials/script') %>
   </body>
 </html>

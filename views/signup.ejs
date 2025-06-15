@@ -3,51 +3,66 @@
   <head>
     <%- include('./partials/head') %>
     <title>SignUp</title>
+    <style>
+      .form-box {
+        max-width: 400px;
+        margin: auto;
+        padding: 25px;
+        border-radius: 12px;
+        background-color: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+    </style>
   </head>
   <body>
     <%- include('./partials/nav') %>
     <div class="container mt-4">
-      <form action="/user/signup" method="post">
+      <form action="/user/signup" method="post" class="form-box">
+        <h3 class="text-center mb-4">Create Account</h3>
+
         <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Full Name</label>
+          <label for="fullName" class="form-label">Full Name</label>
           <input
             type="text"
             class="form-control"
             id="fullName"
             name="fullName"
-            aria-describedby="fullName"
+            required
           />
-          
         </div>
+
         <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label"
-            >Email address</label
-          >
+          <label for="email" class="form-label">Email address</label>
           <input
             type="email"
             name="email"
             class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
+            id="email"
+            required
           />
           <div id="emailHelp" class="form-text">
             We'll never share your email with anyone else.
           </div>
         </div>
+
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <label for="password" class="form-label">Password</label>
           <input
             type="password"
             name="password"
             class="form-control"
-            id="exampleInputPassword1"
+            id="password"
+            required
           />
         </div>
-      
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+
+        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
       </form>
     </div>
-
     <%- include('./partials/script') %>
   </body>
 </html>
