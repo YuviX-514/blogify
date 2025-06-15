@@ -93,26 +93,28 @@
         </button>
       </form>
       <% } %> <% comments.forEach(comment => { %>
-
       <div class="comment-box d-flex align-items-start justify-content-between">
         <div class="comment-box d-flex align-items-start comment">
-        <img src="<%= comment.createdBy.profileImageURL %>" alt="Commenter" />
-        <div>
-          <strong><%= comment.createdBy.fullName %></strong>
-          <p><%= comment.content %></p>
+          <img src="<%= comment.createdBy.profileImageURL %>" alt="Commenter" />
+          <div>
+            <strong><%= comment.createdBy.fullName %></strong>
+            <p><%= comment.content %></p>
+          </div>
         </div>
-        </div>
 
-         <% if (user && comment.createdBy._id.equals(user._id)) { %>
-    <form method="POST" action="/blog/comment/delete/<%= comment._id %>" onsubmit="return confirm('Delete this comment?')">
-      <button class="btn btn-sm btn-outline-danger">🗑️</button>
-    </form>
-  <% } %>
-
-      </div>  
-
-
-      <% }) %> <% if (user && blog.createdBy._id.equals(user._id)) { %>
+        <% if (user && (comment.createdBy._id.equals(user._id) || user.role ===
+        "admin")) { %>
+        <form
+          method="POST"
+          action="/blog/comment/delete/<%= comment._id %>"
+          onsubmit="return confirm('Delete this comment?')"
+        >
+          <button class="btn btn-sm btn-outline-danger">🗑️</button>
+        </form>
+        <% } %>
+      </div>
+      <% }) %> <% if (user && (blog.createdBy._id.equals(user._id) || user.role
+      === "admin")) { %>
       <form
         action="/blog/delete/<%= blog._id %>"
         method="POST"

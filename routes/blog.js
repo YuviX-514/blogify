@@ -91,7 +91,7 @@ router.post('/like/:id', async (req, res) => {
 router.post('/delete/:id', async (req, res) => {
   const blog = await Blog.findById(req.params.id);
 
-  if (!blog.createdBy.equals(req.user._id)) {
+  if (!blog.createdBy.equals(req.user._id) && req.user.role !== 'admin') {
     return res.status(403).send('Unauthorized');
   }
 
@@ -107,7 +107,7 @@ router.post('/comment/delete/:id', async (req, res) => {
   if (!comment) return res.redirect('/');
 
   // sirf owner hi delete kare
-  if (!comment.createdBy.equals(req.user._id)) {
+  if (!comment.createdBy.equals(req.user._id) && req.user.role !== 'admin') {
     return res.status(403).send('Unauthorized');
   }
 
