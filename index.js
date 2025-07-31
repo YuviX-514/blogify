@@ -29,6 +29,7 @@ app.use(express.static(path.resolve("./public")));
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  connectTimeoutMS: 30000
 })
   .then(() => {
     console.log("✅ MongoDB connected");
